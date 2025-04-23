@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Interface</title>
+    <link rel="stylesheet" href="/css/student.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="//localhost:3000/socket.io/socket.io.js"></script>
+    <style>
+        .interface-header {
+            background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .interface-header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 600;
+        }
+        body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: #2c3e50;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.card-header {
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+    color: white;
+    padding: 1.5rem;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ecf0f1;
+    border: 2px solid #bdc3c7;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    max-width: 500px;
+}
+
+video {
+    max-width: 500px;
+    border-radius: 12px;
+}
+
+.button-container button {
+    font-size: 16px;
+    padding: 12px 24px;
+    border-radius: 30px;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #3498db, #2980b9);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #2980b9, #1c5980);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(to right, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+}
+
+.btn-success:hover {
+    background: linear-gradient(to right, #27ae60, #1e8449);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+}
+
+.student-input {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.student-input input {
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 300px;
+}
+
+.student-input button {
+    background: linear-gradient(to right, #8e44ad, #6c3483);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.student-input button:hover {
+    background: linear-gradient(to right, #6c3483, #512e5f);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
+}
+
+.location-status {
+    background-color: #fefefe;
+    border-left: 5px solid #1abc9c;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 25px;
+}
+
+.location-status h3 {
+    margin-top: 0;
+    color: #16a085;
+}
+
+.user-list ul, .room-history ul {
+    list-style: none;
+    padding: 0;
+}
+
+.user-list li, .room-history li {
+    background-color: #f4f6f7;
+    margin-bottom: 10px;
+    padding: 12px 20px;
+    border-left: 5px solid #3498db;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.status-message {
+    margin-top: 15px;
+    padding: 1rem;
+    border-radius: 10px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease-out;
+}
+
+.success {
+    background: linear-gradient(90deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.error {
+    background: linear-gradient(90deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.status p {
+    font-size: 16px;
+    text-align: center;
+    color: #666;
+    margin-top: 20px;
+}
+
+#fetchHistory {
+    background: linear-gradient(to right, #1abc9c, #16a085);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#fetchHistory:hover {
+    background: linear-gradient(to right, #16a085, #117a65);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(26, 188, 156, 0.4);
+}
+
+.history-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+input[type="date"] {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.room-section {
+    display: none;
+}
+
+.login-section {
+    display: block;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- FACE-LOGIN     STARTS   --> 
+
+    <div class="container login-section">
+        <h1 class="page-title">Student Login</h1>
+        <div id="loginSection" class="card">
+            <div class="card-header">
+                <i class="fas fa-sign-in-alt me-2"></i>Login with Face Recognition
+            </div>
+            <div class="card-body">
+                <div class="video-container">
+                    <video id="video" autoplay playsinline></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+                <div class="button-container text-center mt-4">
+                    <button type="button" class="btn btn-primary me-2" id="captureBtn">
+                        <i class="fas fa-camera me-2"></i>Capture Face
+                    </button>
+                    <button type="submit" class="btn btn-success" id="loginBtn" disabled>
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </button>
+                </div>
+                <div id="statusMessage" class="status-message hidden"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FACE-LOGIN     ENDS   --> 
+
+    <!-- ROOM-JOIN     STARTS   -->
+    <div class="container room-section">
+        <div class="interface-header">
+            <h1>Student Interface</h1>
+        </div>
+        
+        <div class="room-controls">
+            <div class="student-input">
+                <input type="text" id="roomId" placeholder="Enter Room Code">
+                <button id="joinRoom">Join Room</button>
+            </div>
+            <div id="roomStatus"></div>
+        </div>
+
+        <div class="user-list">
+            <h3>Users in Room</h3>
+            <ul id="userList"></ul>
+        </div>
+
+        <div class="status">
+            <p id="status">Ready to join room</p>
+        </div>
+
+        <!-- Room History Section -->
+        <div class="room-history">
+            <h2>Room History</h2>
+            <div class="history-controls">
+                <input type="date" id="historyDate">
+                <button id="fetchHistory">Fetch History</button>
+            </div>
+            <ul id="roomHistoryList" class="room-list"></ul>
+        </div>
+    </div>
+    <!-- ROOM-JOIN     ENDS   -->
+
+    <script defer>
+        let currentUser = null;
+        let stream = null;
+        let capturedImage = null;
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('captureBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        var StudentName = null;
+        // Initialize camera when page loads
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    } 
+                });
+                video.srcObject = stream;
+                await video.play();
+                captureBtn.disabled = false;
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                showStatus('Error accessing camera. Please ensure camera permissions are granted.', true);
+            }
+        }
+    
+        // Capture image function
+        function captureImage() {
+            try {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                capturedImage = canvas.toDataURL('image/jpeg');
+                loginBtn.disabled = false;
+                showStatus('Face captured successfully! You can now login.', false);
+            } catch (err) {
+                console.error('Error capturing image:', err);
+                showStatus('Failed to capture image. Please try again.', true);
+            }
+        }
+    
+        // Show status message
+        function showStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message ${isError ? 'error' : 'success'}`;
+            statusMessage.classList.remove('hidden');
+        }
+    
+        // Login form handler
+        async function login() {
+            if (!capturedImage) {
+                showStatus('Please capture your face image first.', true);
+                return;
+            }
+    
+            try {
+                showStatus('Processing login...', false);
+                
+                const formData = new FormData();
+                const blob = await fetch(capturedImage).then(r => r.blob());
+                formData.append('file', blob, 'face.jpg');
+                formData.append('user_type', 'student');
+    
+                const response = await fetch('/recognize', {
+                    method: 'POST',
+                    body: formData
+                });
+    
+                const data = await response.json();
+                
+                if (response.ok && data.success) {
+                    StudentName = data.username;
+                    showStatus('Login successful!', false);
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                    
+                    // Hide login section and show room section
+                    document.querySelector('.login-section').style.display = 'none';
+                    document.querySelector('.room-section').style.display = 'block';
+                } else {
+                    showStatus(data.message || 'Login failed. Please try again.', true);
+                }
+                new StudentRoomManager();
+            } catch (err) {
+                console.error('Login error:', err);
+                showStatus('Login failed. Please try again.', true);
+            }
+        }
+        
+        // Event listeners
+        captureBtn.addEventListener('click', captureImage);
+        loginBtn.addEventListener('click', login);
+    
+        // Start camera when page loads
+        startCamera();
+    
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+
+        // ROOM-JOIN     JS STARTS   
+
+        class StudentRoomManager {
+    constructor() {
+        this.socket = io("http://localhost:3000");
+        this.currentRoom = null;
+        this.currentEmail = StudentName;
+        this.location = null;
+        this.locationWatchId = null;
+
+        // DOM Elements
+        this.roomIdInput = document.getElementById('roomId');
+        this.joinRoomButton = document.getElementById('joinRoom');
+        this.status = document.getElementById('status');
+        this.roomStatus = document.getElementById('roomStatus');
+        this.userList = document.getElementById('userList');
+        this.historyDate = document.getElementById('historyDate');
+        this.fetchHistoryButton = document.getElementById('fetchHistory');
+        this.roomHistoryList = document.getElementById('roomHistoryList');
+        this.locationStatus = document.getElementById('locationStatus');
+
+        this.initializeEventListeners();
+        this.initializeSocketListeners();
+    }
+
+    initializeEventListeners() {
+        this.joinRoomButton.addEventListener('click', () => this.joinRoom());
+        this.fetchHistoryButton.addEventListener('click', () => this.fetchRoomHistory());
+    }
+
+    initializeSocketListeners() {
+        this.socket.on('joined-room', (data) => {
+            this.currentRoom = data.roomid;
+            this.updateUserList(data.users);
+            this.roomStatus.textContent = `Joined room: ${data.roomid}`;
+            this.status.textContent = `Successfully joined room ${data.roomid}`;
+            
+            // Start watching location after joining room
+            this.startLocationTracking();
+        });
+
+        this.socket.on('room-users-updated', (data) => {
+            this.updateUserList(data.users);
+        });
+
+        this.socket.on('user-joined', (data) => {
+            this.status.textContent = `User ${data.name || data.emailid} joined the room`;
+        });
+
+        this.socket.on('user-left', (data) => {
+            this.status.textContent = `User ${data.emailid} left the room`;
+        });
+
+        this.socket.on('join-error', (data) => {
+            this.roomStatus.textContent = `Error: ${data.message}`;
+            this.status.textContent = `Error joining room: ${data.message}`;
+        });
+    }
+
+    async requestLocationPermission() {
+        try {
+            const position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                });
+            });
+            
+            this.location = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            };
+            
+            if (this.locationStatus) {
+                this.locationStatus.textContent = 'Location access granted';
+                this.locationStatus.style.color = 'green';
+            }
+            
+            return true;
+        } catch (error) {
+            console.error('Error getting location:', error);
+            this.status.textContent = 'Error: Could not get location. Please enable location services.';
+            if (this.locationStatus) {
+                this.locationStatus.textContent = 'Location access denied';
+                this.locationStatus.style.color = 'red';
+            }
+            return false;
+        }
+    }
+
+    startLocationTracking() {
+        if (this.locationWatchId) {
+            navigator.geolocation.clearWatch(this.locationWatchId);
+        }
+        
+        this.locationWatchId = navigator.geolocation.watchPosition(
+            (position) => {
+                this.location = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+                
+                if (this.locationStatus) {
+                    this.locationStatus.textContent = `Location: ${this.location.latitude.toFixed(6)}, ${this.location.longitude.toFixed(6)}`;
+                }
+            },
+            (error) => {
+                console.error('Error watching location:', error);
+                if (this.locationStatus) {
+                    this.locationStatus.textContent = 'Location tracking error';
+                    this.locationStatus.style.color = 'red';
+                }
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            }
+        );
+    }
+
+    async joinRoom() {
+        const roomId = this.roomIdInput.value.trim();
+        const emailId = StudentName;
+
+        if (!roomId || !emailId) {
+            this.roomStatus.textContent = 'Please enter both Room ID and Email ID';
+            return;
+        }
+
+        // Request location permission before joining room
+        const locationGranted = await this.requestLocationPermission();
+        if (!locationGranted) {
+            this.roomStatus.textContent = 'Location access is required to join the room';
+            return;
+        }
+
+        this.currentEmail = emailId;
+        this.socket.emit('join-room', {
+            roomid: roomId,
+            emailid: emailId,
+            isTeacher: false,
+            latitude: this.location.latitude,
+            longitude: this.location.longitude
+        });
+    }
+
+    updateUserList(users) {
+        this.userList.innerHTML = '';
+        users.forEach(user => {
+            const li = document.createElement('li');
+            li.className = 'user-item';
+            
+            // Create user display with name if available
+            const userDisplay = user.name || user.email;
+            const joinTime = new Date(user.joinTime);
+            
+            // Format time in IST
+            const options = {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Kolkata'
+            };
+            const formattedJoinTime = joinTime.toLocaleString('en-US', options);
+
+            li.innerHTML = `
+                <span class="user-name">${userDisplay}</span>
+                <span class="user-time">${formattedJoinTime}</span>
+                ${user.isManualEntry ? '<span class="manual-entry">(Manual Entry)</span>' : ''}
+            `;
+            
+            this.userList.appendChild(li);
+        });
+    }
+
+    async fetchRoomHistory() {
+        const date = this.historyDate.value;
+        const email = StudentName;
+
+        if (!date || !email) {
+            this.status.textContent = 'Please enter both date and email';
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/student-room-history?date=${date}&studentEmail=${email}`);
+            const data = await response.json();
+
+            if (response.ok) {
+                this.displayRoomHistory(data);
+            } else {
+                this.status.textContent = `Error: ${data.error}`;
+            }
+        } catch (error) {
+            this.status.textContent = 'Error fetching room history';
+            console.error('Error:', error);
+        }
+    }
+
+    displayRoomHistory(rooms) {
+        this.roomHistoryList.innerHTML = '';
+        
+        if (rooms.length === 0) {
+            const li = document.createElement('li');
+            li.textContent = 'No rooms found for this date';
+            li.style.padding = '1rem';
+            li.style.textAlign = 'center';
+            this.roomHistoryList.appendChild(li);
+            return;
+        }
+
+        rooms.forEach(room => {
+            const li = document.createElement('li');
+            li.className = 'room-item';
+            
+            const roomInfo = document.createElement('div');
+            roomInfo.className = 'room-info';
+            
+            const roomDetails = document.createElement('div');
+            roomDetails.innerHTML = `
+                <strong>Room ID:</strong> ${room.roomId}<br>
+                <strong>Teacher:</strong> ${room.teacherName}
+            `;
+            
+            const timeInfo = document.createElement('div');
+            timeInfo.className = 'room-time';
+            
+            // Format time using IST
+            const joinTime = new Date(room.joinTime);
+            const options = {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Kolkata'
+            };
+            const formattedTime = joinTime.toLocaleString('en-US', options);
+            timeInfo.textContent = `Joined at: ${formattedTime}`;
+            
+            roomInfo.appendChild(roomDetails);
+            roomInfo.appendChild(timeInfo);
+            li.appendChild(roomInfo);
+            
+            this.roomHistoryList.appendChild(li);
+        });
+    }
+}
+    </script>
+</body>
+</html> 

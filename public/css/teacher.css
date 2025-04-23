@@ -1,0 +1,257 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: #2c3e50;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.card-header {
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+    color: white;
+    padding: 1.5rem;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ecf0f1;
+    border: 2px solid #bdc3c7;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    max-width: 500px;
+}
+
+video {
+    max-width: 500px;
+    border-radius: 12px;
+}
+
+.button-container button {
+    font-size: 16px;
+    padding: 12px 24px;
+    border-radius: 30px;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #3498db, #2980b9);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #2980b9, #1c5980);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(to right, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+}
+
+.btn-success:hover {
+    background: linear-gradient(to right, #27ae60, #1e8449);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+}
+
+#roomCodeDisplay {
+    font-size: 24px;
+    font-weight: bold;
+    color: #9b59b6;
+    margin: 10px 0;
+}
+
+.teacher-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.teacher-input button {
+    background: linear-gradient(to right, #8e44ad, #6c3483);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.teacher-input button:hover {
+    background: linear-gradient(to right, #6c3483, #512e5f);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
+}
+
+.room-section {
+    display: none;
+}
+
+.login-section {
+    display: block;
+}
+
+/* Status Message Styles */
+.status-message {
+    margin-top: 15px;
+    padding: 1rem;
+    border-radius: 10px;
+    font-weight: 500;
+    animation: slideIn 0.3s ease-out;
+}
+
+.success {
+    background: linear-gradient(90deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.error {
+    background: linear-gradient(90deg, #f8d7da 0%, #f5c6cb 100%);
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-list ul, .room-history ul {
+    list-style: none;
+    padding: 0;
+}
+
+.user-list li, .room-history li {
+    background-color: #f4f6f7;
+    margin-bottom: 10px;
+    padding: 12px 20px;
+    border-left: 5px solid #3498db;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.manual-student-form {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.manual-student-form input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 70%;
+    margin-bottom: 10px;
+}
+
+.manual-student-form button {
+    background: linear-gradient(to right, #e67e22, #d35400);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+}
+
+.manual-student-form button:hover {
+    background: linear-gradient(to right, #d35400, #a04000);
+}
+
+.status p {
+    font-size: 16px;
+    text-align: center;
+    color: #666;
+    margin-top: 20px;
+}
+
+.error-message {
+    color: #c0392b;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.history-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+input[type="date"] {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+#fetchHistory {
+    background: linear-gradient(to right, #1abc9c, #16a085);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#fetchHistory:hover {
+    background: linear-gradient(to right, #16a085, #117a65);
+}
+

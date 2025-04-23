@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    color: #2c3e50;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+    border: none;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.card-header {
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+    color: white;
+    padding: 1.5rem;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ecf0f1;
+    border: 2px solid #bdc3c7;
+    border-radius: 16px;
+    margin-bottom: 20px;
+max-width: 500px;
+}
+
+video {
+    max-width: 500px;
+    border-radius: 12px;
+}
+
+.button-container button {
+    font-size: 16px;
+    padding: 12px 24px;
+    border-radius: 30px;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(to right, #3498db, #2980b9);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(to right, #2980b9, #1c5980);
+}
+
+.btn-success {
+    background: linear-gradient(to right, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+}
+
+.btn-success:hover {
+    background: linear-gradient(to right, #27ae60, #1e8449);
+}
+
+#roomCodeDisplay {
+    font-size: 24px;
+    font-weight: bold;
+    color: #9b59b6;
+    margin: 10px 0;
+}
+
+.teacher-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.teacher-input button {
+    background: linear-gradient(to right, #8e44ad, #6c3483);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.teacher-input button:hover {
+    background: linear-gradient(to right, #6c3483, #512e5f);
+}
+
+.user-list ul, .room-history ul {
+    list-style: none;
+    padding: 0;
+}
+
+.user-list li, .room-history li {
+    background-color: #f4f6f7;
+    margin-bottom: 10px;
+    padding: 12px 20px;
+    border-left: 5px solid #3498db;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.manual-student-form {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.manual-student-form input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 70%;
+    margin-bottom: 10px;
+}
+
+.manual-student-form button {
+    background: linear-gradient(to right, #e67e22, #d35400);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+}
+
+.manual-student-form button:hover {
+    background: linear-gradient(to right, #d35400, #a04000);
+}
+
+.status p {
+    font-size: 16px;
+    text-align: center;
+    color: #666;
+    margin-top: 20px;
+}
+
+.status-message {
+    margin-top: 15px;
+    color: #e74c3c;
+    font-weight: bold;
+    text-align: center;
+}
+
+.error-message {
+    color: #c0392b;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.history-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+input[type="date"] {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+#fetchHistory {
+    background: linear-gradient(to right, #1abc9c, #16a085);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#fetchHistory:hover {
+    background: linear-gradient(to right, #16a085, #117a65);
+}
+
+.room-section {
+    display: none;
+}
+
+.login-section {
+    display: block;
+}
+
+.interface-header {
+    background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.interface-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+    </style>
+    <title>Teacher Interface</title>
+</head>
+<body>
+
+
+    <div class="container login-section">
+        <h1 class="page-title">Teacher Login</h1>
+        
+        <!-- Login Section -->
+        <div id="loginSection" class="card">
+            <div class="card-header">
+                <i class="fas fa-sign-in-alt me-2"></i>Login with Face Recognition
+            </div>
+            <div class="card-body">
+                <div class="video-container">
+                    <video id="loginVideo" autoplay playsinline></video>
+                    <canvas id="loginCanvas" style="display: none;"></canvas>
+                </div>
+                <div class="button-container text-center mt-4">
+                    <button type="button" class="btn btn-primary me-2" id="loginCaptureBtn">
+                        <i class="fas fa-camera me-2"></i>Capture Face
+                    </button>
+                    <button type="submit" class="btn btn-success" id="loginBtn" disabled>
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </button>
+                </div>
+                <div id="statusMessage" class="status-message hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container room-section">
+        <div class="interface-header">
+            <h1>Teacher Interface</h1>
+        </div>
+        
+        <div class="room-controls">
+            <div class="teacher-input">
+                <button id="generateRoom">Generate Room Code</button>
+                <div id="roomCodeDisplay"></div>
+                <button id="joinRoom" style="display: none;">Join Room</button>
+            </div>
+            <div id="roomStatus"></div>
+        </div>
+
+        <div class="user-list">
+            <h3>Users in Room</h3>
+            <ul id="userList"></ul>
+        </div>
+
+        <!-- Manual Student Input Form -->
+        <div class="manual-student-form" id="manualStudentForm" style="display: none;">
+            <h3>Add Student Manually</h3>
+            <input type="email" id="studentEmail" placeholder="Student Email">
+            <button id="addStudent">Add Student</button>
+            <div id="addStudentError" class="error-message"></div>
+        </div>
+
+        <div class="status">
+            <p id="status">Ready to generate room</p>
+            <button id="saveRoom" style="display: none;">Save Room Data</button>
+        </div>
+
+        <!-- New Room History Section -->
+        <div class="room-history">
+            <h2>Room History</h2>
+            <div class="history-controls">
+                <input type="date" id="historyDate">
+                <button id="fetchHistory">Fetch History</button>
+            </div>
+            <ul id="roomHistoryList" class="room-list"></ul>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <script src="//localhost:3000/socket.io/socket.io.js"></script>
+    <script defer>
+        let currentUser = null;
+        let stream = null;
+        let capturedImage = null;
+        const video = document.getElementById('loginVideo');
+        const canvas = document.getElementById('loginCanvas');
+        const captureBtn = document.getElementById('loginCaptureBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const messageDiv = document.getElementById('statusMessage');
+        const loginSection = document.getElementById('loginSection');
+        var TeacherName = null;
+        // Initialize camera when page loads
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    } 
+                });
+                video.srcObject = stream;
+                await video.play();
+                captureBtn.disabled = false;
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+                showStatus('Error accessing camera. Please ensure camera permissions are granted.', true);
+            }
+        }
+
+        // Capture image function
+        function captureImage() {
+            try {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                canvas.getContext('2d').drawImage(video, 0, 0);
+                capturedImage = canvas.toDataURL('image/jpeg');
+                loginBtn.disabled = false;
+                showStatus('Face captured successfully! You can now login.', false);
+            } catch (err) {
+                console.error('Error capturing image:', err);
+                showStatus('Failed to capture image. Please try again.', true);
+            }
+        }
+
+        // Show status message
+        function showStatus(message, isError = false) {
+            messageDiv.textContent = message;
+            messageDiv.className = `status-message ${isError ? 'error' : 'success'}`;
+            messageDiv.classList.remove('hidden');
+        }
+
+        // Login form handler
+        async function login() {
+            if (!capturedImage) {
+                showStatus('Please capture your face image first.', true);
+                return;
+            }
+
+            try {
+                showStatus('Processing login...', false);
+                
+                const formData = new FormData();
+                const blob = await fetch(capturedImage).then(r => r.blob());
+                formData.append('file', blob, 'face.jpg');
+                formData.append('user_type', 'teacher');
+
+                const response = await fetch('/recognize', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                console.log('Server response:', data);
+                
+                if (response.ok && data.success) {
+                    TeacherName = data.username;
+                    console.log('Current user set to:', TeacherName);
+                    showStatus('Login successful!', false);
+                    
+                    // Hide login section and show room section
+                    document.querySelector('.login-section').style.display = 'none';
+                    document.querySelector('.room-section').style.display = 'block';
+                    
+                    if (stream) {
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                } else {
+                    showStatus(data.message || 'Login failed. Please try again.', true);
+                }
+                new TeacherRoomManager();
+            } catch (err) {
+                console.error('Login error:', err);
+                showStatus('Login failed. Please try again.', true);
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            capturedImage = null;
+            loginBtn.disabled = true;
+            document.getElementById('loginSection').classList.remove('hidden');
+            startCamera();
+        }
+
+        // Event listeners
+        captureBtn.addEventListener('click', captureImage);
+        loginBtn.addEventListener('click', login);
+
+        // Start camera when page loads
+        startCamera();
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+        });
+
+
+
+
+
+// room js code starts
+
+        class TeacherRoomManager {
+    constructor() {
+        this.socket = io("http://localhost:3000");
+        this.currentRoom = null;
+        this.currentEmail = null;
+        this.teacherName = TeacherName;
+        this.location = null;
+        this.locationWatchId = null;
+
+        // DOM Elements
+        this.generateRoomButton = document.getElementById('generateRoom');
+        this.joinRoomButton = document.getElementById('joinRoom');
+        this.roomCodeDisplay = document.getElementById('roomCodeDisplay');
+        this.status = document.getElementById('status');
+        this.roomStatus = document.getElementById('roomStatus');
+        this.userList = document.getElementById('userList');
+        this.saveRoomButton = document.getElementById('saveRoom');
+        
+        // New DOM Elements for Room History
+        this.historyDateInput = document.getElementById('historyDate');
+        this.fetchHistoryButton = document.getElementById('fetchHistory');
+        this.roomHistoryList = document.getElementById('roomHistoryList');
+
+        // New DOM Elements for Manual Student Input
+        this.manualStudentForm = document.getElementById('manualStudentForm');
+        this.studentEmailInput = document.getElementById('studentEmail');
+        this.addStudentButton = document.getElementById('addStudent');
+        this.addStudentError = document.getElementById('addStudentError');
+
+        this.initializeEventListeners();
+        this.initializeSocketListeners();
+    }
+
+    initializeEventListeners() {
+        this.generateRoomButton.addEventListener('click', () => this.generateRoom());
+        this.joinRoomButton.addEventListener('click', () => this.joinRoom());
+        this.saveRoomButton.addEventListener('click', () => this.saveRoomData());
+        this.fetchHistoryButton.addEventListener('click', () => this.fetchRoomHistory());
+        this.addStudentButton.addEventListener('click', () => this.addManualStudent());
+    }
+
+    initializeSocketListeners() {
+        this.socket.on('joined-room', (data) => {
+            this.currentRoom = data.roomid;
+            this.updateUserList(data.users);
+            this.roomStatus.textContent = `Joined room: ${data.roomid}`;
+            this.status.textContent = `Successfully joined room ${data.roomid}`;
+            this.saveRoomButton.style.display = 'block';
+            this.manualStudentForm.style.display = 'block'; // Show manual student form
+            
+            // Start watching location after joining room
+            this.startLocationTracking();
+        });
+
+        this.socket.on('room-users-updated', (data) => {
+            this.updateUserList(data.users);
+        });
+
+        this.socket.on('user-joined', (data) => {
+            this.status.textContent = `User ${data.name || data.emailid} joined the room`;
+        });
+
+        this.socket.on('user-left', (data) => {
+            this.status.textContent = `User ${data.emailid} left the room`;
+        });
+
+        this.socket.on('save-success', (data) => {
+            this.status.textContent = data.message;
+            this.saveRoomButton.disabled = false;
+        });
+
+        this.socket.on('save-error', (data) => {
+            this.status.textContent = `Error: ${data.message}`;
+            this.saveRoomButton.disabled = false;
+        });
+
+        this.socket.on('add-student-error', (data) => {
+            this.addStudentError.textContent = data.message;
+            this.addStudentError.style.display = 'block';
+        });
+
+        this.socket.on('location-update-error', (data) => {
+            this.status.textContent = `Location Error: ${data.message}`;
+        });
+    }
+
+    async requestLocationPermission() {
+        try {
+            const position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject, {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                });
+            });
+            
+            this.location = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            };
+            
+            return true;
+        } catch (error) {
+            console.error('Error getting location:', error);
+            this.status.textContent = 'Error: Could not get location. Please enable location services.';
+            return false;
+        }
+    }
+
+    startLocationTracking() {
+        if (this.locationWatchId) {
+            navigator.geolocation.clearWatch(this.locationWatchId);
+        }
+        
+        this.locationWatchId = navigator.geolocation.watchPosition(
+            (position) => {
+                this.location = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                };
+                
+                // Send location update to server
+                if (this.currentRoom) {
+                    this.socket.emit('update-teacher-location', {
+                        roomid: this.currentRoom,
+                        latitude: this.location.latitude,
+                        longitude: this.location.longitude
+                    });
+                }
+            },
+            (error) => {
+                console.error('Error watching location:', error);
+                this.status.textContent = 'Error: Could not track location. Please enable location services.';
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            }
+        );
+    }
+
+    async generateRoom() {
+        if (!TeacherName) {
+            this.roomStatus.textContent = 'Please enter your name';
+            return;
+        }
+
+        // Request location permission before generating room
+        const locationGranted = await this.requestLocationPermission();
+        if (!locationGranted) {
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/generate-room', {
+                method: 'POST'
+            });
+            const data = await response.json();
+            
+            this.teacherName = TeacherName;
+            this.currentRoom = data.roomCode;
+            this.roomCodeDisplay.textContent = `Room Code: ${data.roomCode}`;
+            this.joinRoomButton.style.display = 'block';
+            this.status.textContent = 'Room code generated. Click Join Room to enter.';
+        } catch (error) {
+            this.status.textContent = 'Error generating room code';
+        }
+    }
+
+    async joinRoom() {
+        if (!this.currentRoom || !this.teacherName) {
+            this.roomStatus.textContent = 'Please generate a room code first';
+            return;
+        }
+
+        // Make sure we have location data
+        if (!this.location) {
+            const locationGranted = await this.requestLocationPermission();
+            if (!locationGranted) {
+                return;
+            }
+        }
+
+        this.currentEmail = `teacher_${this.teacherName}`;
+        this.socket.emit('join-room', {
+            roomid: this.currentRoom,
+            emailid: this.currentEmail,
+            isTeacher: true,
+            teacherName: this.teacherName,
+            latitude: this.location.latitude,
+            longitude: this.location.longitude
+        });
+    }
+
+    saveRoomData() {
+        if (!this.currentRoom || !this.teacherName) {
+            this.status.textContent = 'Error: Room or teacher information is missing';
+            return;
+        }
+
+        this.status.textContent = 'Saving room data...';
+        this.saveRoomButton.disabled = true;
+
+        this.socket.emit('save-room-data', {
+            roomid: this.currentRoom,
+            teacherName: this.teacherName
+        });
+    }
+
+    addManualStudent() {
+        const studentEmail = this.studentEmailInput.value.trim();
+        
+        if (!studentEmail) {
+            this.addStudentError.textContent = 'Please enter student email';
+            this.addStudentError.style.display = 'block';
+            return;
+        }
+
+        if (!this.currentRoom) {
+            this.addStudentError.textContent = 'No active room';
+            this.addStudentError.style.display = 'block';
+            return;
+        }
+
+        this.socket.emit('add-manual-student', {
+            roomid: this.currentRoom,
+            studentEmail: studentEmail
+        });
+
+        // Clear input and error message
+        this.studentEmailInput.value = '';
+        this.addStudentError.style.display = 'none';
+    }
+
+    updateUserList(users) {
+        this.userList.innerHTML = '';
+        users.forEach(user => {
+            const li = document.createElement('li');
+            li.className = 'user-item';
+            
+            // Create user display with name if available
+            const userDisplay = user.name || user.email;
+            const joinTime = new Date(user.joinTime);
+            
+            // Format time in IST
+            const options = {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Kolkata'
+            };
+            const formattedJoinTime = joinTime.toLocaleString('en-US', options);
+
+            li.innerHTML = `
+                <span class="user-name">${userDisplay}</span>
+                <span class="user-time">${formattedJoinTime}</span>
+                ${user.isManualEntry ? '<span class="manual-entry">(Manual Entry)</span>' : ''}
+            `;
+            
+            this.userList.appendChild(li);
+        });
+    }
+
+    async fetchRoomHistory() {
+        const date = this.historyDateInput.value;
+        if (!date) {
+            this.status.textContent = 'Please select a date';
+            return;
+        }
+
+        if (!TeacherName) {
+            this.status.textContent = 'Please xxx  first';
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/room-history?date=${date}&teacherName=${encodeURIComponent(TeacherName)}`);
+            const rooms = await response.json();
+            
+            this.displayRoomHistory(rooms);
+        } catch (error) {
+            this.status.textContent = 'Error fetching room history';
+            console.error('Error:', error);
+        }
+    }
+
+    displayRoomHistory(rooms) {
+        this.roomHistoryList.innerHTML = '';
+        
+        if (rooms.length === 0) {
+            this.roomHistoryList.innerHTML = '<li class="room-item">No rooms found for this date</li>';
+            return;
+        }
+
+        rooms.forEach(room => {
+            const li = document.createElement('li');
+            li.className = 'room-item';
+            
+            // Format the date in IST
+            const roomDate = new Date(room.date);
+            
+            const dateOptions = {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+                timeZone: 'Asia/Kolkata'
+            };
+            const formattedDate = roomDate.toLocaleString('en-US', dateOptions);
+
+            // Filter out teacher from users list
+            const students = room.users.filter(user => !user.email.startsWith('teacher_'));
+
+            li.innerHTML = `
+                <div>
+                    <strong>Room ID:</strong> ${room.roomId}<br>
+                    <strong>Teacher:</strong> ${room.teacherName}<br>
+                    <strong>Date:</strong> ${formattedDate}<br>
+                    <strong>Total Students:</strong> ${students.length}
+                </div>
+                <div class="user-details">
+                    <h4>Students in this room:</h4>
+                    <ul class="user-list">
+                        ${students.map(user => {
+                            const joinTime = new Date(user.joinTime);
+                            const formattedJoinTime = joinTime.toLocaleString('en-US', dateOptions);
+                            return `
+                                <li class="user-item">
+                                    <strong>Roll_Number:</strong> ${user.email}<br>
+                                    <strong>Joined:</strong> ${formattedJoinTime}
+                                </li>
+                            `;
+                        }).join('')}
+                    </ul>
+                </div>
+            `;
+
+            // Add click event to show/hide user details
+            li.addEventListener('click', () => {
+                const userDetails = li.querySelector('.user-details');
+                userDetails.style.display = userDetails.style.display === 'none' ? 'block' : 'none';
+            });
+
+            this.roomHistoryList.appendChild(li);
+        });
+    }
+} 
+    </script>
+
+
+</body>
+</html> 
